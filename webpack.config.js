@@ -1,7 +1,8 @@
 const path = require('path');
-const Terser = require('terser-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 module.exports = {
   entry: './src/js/index.js',
   output: {
@@ -11,17 +12,31 @@ module.exports = {
   },
   devtool: 'source-map',
   mode: 'development',
+  devServer: {
+    host: 'localhost',
+    port: 8000,
+    open: true,
+    watchFiles: 'index.html',
+  },
   plugins: [
     new HtmlWebpackPlugin({
       title: 'keyboard',
-      template: './index.html',
+      template: './index.html', // enable lodash
       inject: 'body',
       favicon: './globe.png',
     }),
     // inject css to html
     new MiniCssExtractPlugin({ filename: 'style.css' }),
   ],
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+      },
+    ],
+  },
   optimization: {
-    minimizer: [new Terser()],
+    minimizer: [new TerserPlugin(), new CssMinimizerPlugin()],
   },
 };
