@@ -24,7 +24,7 @@ export class Keyboard {
   #addEvent() {
     this.#switchElement.addEventListener('change', this.#onChangeTheme);
     this.#fontSelectElement.addEventListener('change', this.#onChangeFont);
-    document.addEventListener('keydown', this.#onKeydown);
+    document.addEventListener('keydown', this.#onKeydown.bind(this));
     document.addEventListener('keyup', this.#onKeyup.bind(this));
     this.#inputElement.addEventListener('input', this.#onInput.bind(this));
   }
@@ -42,8 +42,8 @@ export class Keyboard {
 
   #onKeydown(event) {
     console.log(this);
-    // const key = this.#getKeyboardKey(event);
-    // key?.classList.add('active');
+    const key = this.#getKeyboardKey(event);
+    key?.classList.add('active');
   }
 
   #onKeyup(event) {
